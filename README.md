@@ -25,7 +25,11 @@ TBD
 
 ## Formulas Used
 For Memoria stats: Base Stats x Level x Stat Degree x Trait Multiplier
+
 For Unit damage: (Base Damage x Familiar Stats + Memoria Stats) x Unit Level x Unit Trait x Unit Stat Degree
+
 For Crits: (Unit Damage * Crit Damage Modifier * Crit Chance) + (Unit Damage * (1 - Crit Chance))
+
 For DoTs: They are calculated the same as above damage, based on the percentage and time (ex. 50% bleed over 8 seconds.)
+
 For Level modifier: 3.9442, derived from official sources (difference between level 1 and 60)
