@@ -2,7 +2,7 @@
 This project seeks to provide an easily updatable and robust stat calculator for the Roblox game Anime Vanguards.
 
 ## Features (unimplemented unless stated otherwise)
-- Calculates stats based on unit, trait, familiar, and memoria data
+- Calculates stats and estimated DPS based on unit, trait, familiar, and memoria data
 - Reads relevant data from CSV files, for easy modification
 - Accepts user input for selection of unit, trait, buffs, etc.
 - Supports crit damage calculation and takes DoT into account
@@ -18,7 +18,9 @@ This project seeks to provide an easily updatable and robust stat calculator for
 3. uv run main.py to ensure it is installed correctly
 
 ## Usage
-TBD
+```uv run main.py [unit-name]```
+
+To see a list of flags and optional commands, use ```uv run main.py --help```
 
 ## Data
 TBD
