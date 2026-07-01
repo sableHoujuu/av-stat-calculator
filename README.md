@@ -18,9 +18,11 @@ This project seeks to provide an easily updatable and robust stat calculator for
 3. uv run main.py to ensure it is installed correctly
 
 ## Usage
-```uv run main.py [unit-name]```
+```uv run main.py```
 
-To see a list of flags and optional commands, use ```uv run main.py --help```
+To see a list of flags and optional arguments, use ```uv run main.py --help```
+
+If you do not include any flags or optional arguments with the initial query, it will ask questions and prompt user input.
 
 ## Data
 TBD
