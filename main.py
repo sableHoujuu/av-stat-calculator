@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from src.data_loader import get_unit_data
+from src.trait_manager import UnitTrait
 
 
 def main():
@@ -14,6 +15,7 @@ def main():
         print("More than 1 unit found, implement this later")
         sys.exit(1)
     print("Unit found.")
+
     while True:
         try:
             unit_level = int(input("Enter unit level: "))
@@ -23,6 +25,14 @@ def main():
             break
         except ValueError:
             print("Please enter a whole number.")
+
+    while True:
+        usr_input = str(input("Enter unit trait: "))
+        try:
+            unit_trait = UnitTrait(usr_input.lower())
+            break
+        except ValueError:
+            print("Please input a valid trait.")
 
 
 if __name__ == "__main__":

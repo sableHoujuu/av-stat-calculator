@@ -8,6 +8,7 @@ unit_data = pd.read_csv("data/units.csv", index_col="unit_id")
 
 
 def get_unit_data(name: str) -> pd.Series | pd.DataFrame:
+    """Gets requested unit data from CSV data. If none is found, exits program."""
     # TODO: figure out how to remove things like apostrophes, and add alias checking (ex. gojo returns "today's strongest")
     name = name.lower()
     try:
