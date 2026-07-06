@@ -1,2 +1,3 @@
-unit_id,unit_name,unit_rarity,unit_damage,unit_spa
-1,Today's Strongest,Vanguard,250000,10
+unit_id,unit_name,unit_rarity,unit_damage,unit_spa,unit_range
+1,Today's Strongest,Vanguard,250000,10,52
+2,History's Strongest,Vanguard,80000,10,52
