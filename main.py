@@ -15,6 +15,11 @@ def main():
     if matching_units is pd.DataFrame:
         raise NotImplementedError
     print("Unit found.")
+    matching_unit = matching_units.reset_index().iloc[
+        0
+    ]  # i know this is bad, but right now while the filter itself isn't implemented, this is necessary
+
+    usr_input_values = {}
 
     # getting level
     while True:
@@ -26,9 +31,12 @@ def main():
             break
         except ValueError:
             print("Please enter a whole number.")
+        except TypeError:
+            print("Please input a number.")
         except Exception as e:
             print(f"Unhandled exception: {e}")
             sys.exit(1)
+    usr_input_values["unit_level"] = unit_level
 
     # getting trait
     while True:
@@ -41,6 +49,7 @@ def main():
         except Exception as e:
             print(f"Unhandled exception: {e}")
             sys.exit(1)
+    usr_input_values["unit_trait"] = unit_trait
 
     # getting stat degrees
     while True:
@@ -50,6 +59,8 @@ def main():
                 print("Attack stat must be between 0 and 25.")
                 continue
             break
+        except TypeError:
+            print("Please input a number.")
         except Exception as e:
             print(f"Unhandled exception: {e}")
             sys.exit(1)
@@ -61,6 +72,8 @@ def main():
                 print("SPA stat must be between 0 and 12.5.")
                 continue
             break
+        except TypeError:
+            print("Please input a number.")
         except Exception as e:
             print(f"Unhandled exception: {e}")
             sys.exit(1)
@@ -72,17 +85,24 @@ def main():
                 print("Range stat must be between 0 and 12.5.")
                 continue
             break
+        except TypeError:
+            print("Please input a number.")
         except Exception as e:
             print(f"Unhandled exception: {e}")
             sys.exit(1)
 
-    # all required unit information gathered, time to start doing stuff, after one last prompt
+    usr_input_values["unit_atk_degree"] = unit_atk_degree
+    usr_input_values["unit_spa_degree"] = unit_spa_degree
+    usr_input_values["unit_rng_degree"] = unit_rng_degree
+    # all required unit information gathered, time to start doing stuff, like packaging the data we have
+
+    final_unit_data = pd.concat([matching_unit, pd.Series(usr_input_values)])
 
     calc_only_unit: bool = not confirm(
         "Would you like to perform the calculations using a memoria, familiar, or external buffs?"
     )
     if calc_only_unit is True:
-        print("gonna calc")
+        print(final_unit_data)
         return
     raise NotImplementedError
 
