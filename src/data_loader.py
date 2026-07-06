@@ -12,7 +12,7 @@ def get_unit_data(name: str) -> pd.Series | pd.DataFrame:
     # TODO: figure out how to remove things like apostrophes, and add alias checking (ex. gojo returns "today's strongest")
     name = name.lower()
     try:
-        unit_rows = unit_data[unit_data["unit_name".lower()] == name]
+        unit_rows = unit_data[unit_data["unit_name"].str.lower() == name]
     except KeyError:
         print("Can't find specified unit, exiting.")
         sys.exit(1)
