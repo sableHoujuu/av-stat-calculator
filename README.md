@@ -36,4 +36,4 @@ For Crits: (Unit Damage * Crit Damage Modifier * Crit Chance) + (Unit Damage * (
 
 For DoTs: They are calculated the same as above damage, based on the percentage and time (ex. 50% bleed over 8 seconds.)
 
-For Level modifier: 3.9442, derived from official sources (difference between level 1 and 60)
+For Level modifier: 3.9442064, derived from official sources (difference between level 1 and 60 on the highest base damage unit at the time of writing, Today's Strongest)
