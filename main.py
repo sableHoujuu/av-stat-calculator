@@ -3,12 +3,14 @@ import sys
 import numpy as np
 import pandas as pd
 
+from src.calculator import calculate_unit_stats
 from src.common_prompts import confirm
-from src.data_loader import get_unit_data
+from src.data_loader import get_unit_data, validate_data
 from src.trait_manager import UnitTrait
 
 
 def main():
+    # validate_data()
     unit_name = input("Enter unit name: ")
     print("Finding unit...")
     matching_units = get_unit_data(unit_name)
@@ -96,13 +98,14 @@ def main():
     usr_input_values["unit_rng_degree"] = unit_rng_degree
     # all required unit information gathered, time to start doing stuff, like packaging the data we have
 
-    final_unit_data = pd.concat([matching_unit, pd.Series(usr_input_values)])
+    gathered_unit_data = pd.concat([matching_unit, pd.Series(usr_input_values)])
+    # this will become final_unit_data later, once we do the calculations and process it to be usable
 
     calc_only_unit: bool = not confirm(
         "Would you like to perform the calculations using a memoria, familiar, or external buffs?"
     )
     if calc_only_unit is True:
-        print(final_unit_data)
+        print(calculate_unit_stats(gathered_unit_data))
         return
     raise NotImplementedError
 
