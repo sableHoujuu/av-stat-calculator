@@ -1,0 +1,6 @@
+unit_id,passive_type,min_value,max_value,value_affects,value_type,status_duration,application,description
+1,permanent_buff,0,1,damage,max,inf,true_multiplicative,Deal 100% more damage
+1,conditional_buff,0,1,damage,max,15,multiplicative,"While Void is active, buff this unit's damage by 100%"
+1,permanent_buff,0,0.5,crit_damage,max,inf,multiplicative,Critical hits from this unit deal 50% more damage 
+1,conditional_buff,0,1,damage,range,inf,multiplicative,Cursed Output: Buff crit rate and damage by the meter spent 
+1,conditional_buff,0,1,crit_rate,range,inf,additive,Cursed Output: Buff crit rate and damage by the meter spent 
