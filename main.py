@@ -5,18 +5,28 @@ import pandas as pd
 
 from src.calculator import calculate_unit_stats
 from src.common_prompts import confirm
-from src.data_loader import get_unit_data, validate_data
+from src.data_loader import get_memoria_data, get_unit_data, validate_data
 from src.trait_manager import UnitTrait
 
 
 def main():
     # validate_data()
-    unit_name = input("Enter unit name: ")
-    print("Finding unit...")
-    matching_units = get_unit_data(unit_name)
+    while True:
+        usr_input = str(input("Enter unit name: "))
+        try:
+            unit_name = usr_input.lower()
+            print("Finding unit...")
+            matching_units = get_unit_data(unit_name)
+            print("Unit found.")
+            break
+        except ValueError:
+            print("Unit could not be found, please try again.")
+        except Exception as e:
+            print(f"Unhandled exception: {e}")
+            sys.exit(1)
+
     if matching_units is pd.DataFrame:
         raise NotImplementedError
-    print("Unit found.")
     matching_unit = matching_units.reset_index().iloc[
         0
     ]  # i know this is bad, but right now while the filter itself isn't implemented, this is necessary
@@ -107,7 +117,8 @@ def main():
     if calc_only_unit is True:
         print(calculate_unit_stats(gathered_unit_data))
         return
-    raise NotImplementedError
+
+    memoria_name = input("Please")
 
 
 if __name__ == "__main__":

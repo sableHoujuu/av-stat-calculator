@@ -30,10 +30,10 @@ Damage: {self.damage}
 SPA: {self.spa}
 Range: {self.range}
 Level: {self.level}
-Trait: {self.trait}
-Attack Stat: {self.attack_degree}
-SPA Stat: {self.spa_degree}
-Range Stat: {self.range_degree}
+Trait: {self.trait} (fix this to print the trait name)
+Attack Stat: {(self.attack_degree - 1) * 100}%
+SPA Stat: {(self.spa_degree - 1) * 100}%
+Range Stat: {(self.range_degree - 1) * 100}%
 Memoria: {self.memoria}
 Familiar: {self.familiar}
 Final Estimated DPS: {self.expected_dps}
@@ -41,7 +41,7 @@ Final Estimated DPS: {self.expected_dps}
 
 
 def calculate_unit_stats(gathered_unit_data: pd.Series) -> FinalUnitData:
-    """Given a properly formatted input Series from pandas, and memoria or familiars, reads all relevant information and preforms all of the necessary calculations for final stats and DPS."""
+    """Given a properly formatted input Series from pandas, and memoria or familiars, reads all relevant information and preforms all of the necessary calculations for final base stats and DPS. Does not calculate things like passives."""
     familiar_placeholder = 1  # replace with familiar stats
     memoria_placeholder = 0  # replace with memoria stats
     trait_stats: TraitStats = get_unit_trait_stats(
@@ -49,9 +49,10 @@ def calculate_unit_stats(gathered_unit_data: pd.Series) -> FinalUnitData:
     )
 
     # converting these to percentile for later, they can't change at this point
-    unit_spa_degree = gathered_unit_data["unit_spa_degree"] / 100 + 1
-    unit_atk_degree = gathered_unit_data["unit_atk_degree"] / 100 + 1
-    unit_rng_degree = gathered_unit_data["unit_rng_degree"] / 100 + 1
+    unit_spa_degree = 1 - (gathered_unit_data["unit_spa_degree"] / 100)
+    # ^ this one makes things go down so, needs to be inverse
+    unit_atk_degree = (gathered_unit_data["unit_atk_degree"] / 100) + 1
+    unit_rng_degree = (gathered_unit_data["unit_rng_degree"] / 100) + 1
 
     unit_damage = float(  # to silence the type checker
         (
@@ -65,15 +66,19 @@ def calculate_unit_stats(gathered_unit_data: pd.Series) -> FinalUnitData:
         )
     )
     unit_spa = (
-        gathered_unit_data["unit_spa"] * unit_spa_degree * familiar_placeholder
-        + memoria_placeholder
+        gathered_unit_data["unit_spa"]
+        * unit_spa_degree
+        * familiar_placeholder
+        * trait_stats.spa
     )
     unit_rng = (
-        gathered_unit_data["unit_rng"] * unit_rng_degree * familiar_placeholder
-        + memoria_placeholder
+        (gathered_unit_data["unit_rng"] + memoria_placeholder)
+        * unit_rng_degree
+        * familiar_placeholder
+        * trait_stats.rng
     )
 
-    unit_dps = unit_damage * unit_spa
+    unit_dps = unit_damage / unit_spa
 
     final_unit_data = FinalUnitData(
         unit_id=gathered_unit_data["unit_id"],
