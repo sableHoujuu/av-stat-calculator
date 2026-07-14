@@ -118,7 +118,23 @@ def main():
         print(calculate_unit_stats(gathered_unit_data))
         return
 
-    memoria_name = input("Please")
+    while True:
+       usr_input = str(input("Enter memoria name: "))
+       try:
+           memoria_name = usr_input.lower()
+           print("Finding memoria...")
+           matching_memorias = get_memoria_data(memoria_name)
+           print("Memoria found.")
+           break
+       except ValueError:
+           print("Memoria could not be found, please try again.")
+       except Exception as e:
+           print(f"Unhandled exception: {e}")
+           sys.exit(1)
+
+    matching_memoria = matching_memorias.reset_index().iloc[0]
+
+    print(calculate_unit_stats(gathered_unit_data, memoria_data=matching_memoria))
 
 
 if __name__ == "__main__":

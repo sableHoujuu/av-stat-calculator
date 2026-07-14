@@ -19,7 +19,7 @@ class FinalUnitData:
     attack_degree: float
     spa_degree: float
     range_degree: float
-    memoria: None  # not implemented
+    memoria: str | None  # not implemented
     familiar: None  # not implemented
     expected_dps: float
 
@@ -40,10 +40,20 @@ Final Estimated DPS: {self.expected_dps}
 """
 
 
-def calculate_unit_stats(gathered_unit_data: pd.Series) -> FinalUnitData:
+def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, familiar_data=None) -> FinalUnitData:
     """Given a properly formatted input Series from pandas, and memoria or familiars, reads all relevant information and preforms all of the necessary calculations for final base stats and DPS. Does not calculate things like passives."""
-    familiar_placeholder = 1  # replace with familiar stats
-    memoria_placeholder = 0  # replace with memoria stats
+    if memoria_data is None:
+        memoria_dmg, memoria_rng = 0, 0
+        memoria_name = None
+    else:
+        memoria_dmg, memoria_rng = memoria_data["memoria_dmg"], memoria_data["memoria_rng"]
+        memoria_name = memoria_data["memoria_name"]
+
+    if familiar_data is None:
+        familiar_dmg, familiar_spa, familiar_rng, familiar_crit_chance, familiar_crit_dmg = 0, 1, 0, 0, 0
+    else:
+        raise NotImplementedError
+
     trait_stats: TraitStats = get_unit_trait_stats(
         UnitTrait(gathered_unit_data["unit_trait"])
     )
@@ -57,8 +67,8 @@ def calculate_unit_stats(gathered_unit_data: pd.Series) -> FinalUnitData:
     unit_damage = float(  # to silence the type checker
         (
             (
-                gathered_unit_data["unit_dmg"] * familiar_placeholder
-                + memoria_placeholder
+                gathered_unit_data["unit_dmg"] * (1 + familiar_dmg)
+                + memoria_dmg # * 3.9442064 * (memoria_level / 60)
             )
             * (3.9442064 * (gathered_unit_data["unit_level"] / 60))
             * trait_stats.dmg
@@ -67,15 +77,11 @@ def calculate_unit_stats(gathered_unit_data: pd.Series) -> FinalUnitData:
     )
     unit_spa = (
         gathered_unit_data["unit_spa"]
-        * unit_spa_degree
-        * familiar_placeholder
-        * trait_stats.spa
+        * (1 - (1 - unit_spa_degree) - (1 - familiar_spa) - (1 - trait_stats.spa))
     )
     unit_rng = (
-        (gathered_unit_data["unit_rng"] + memoria_placeholder)
-        * unit_rng_degree
-        * familiar_placeholder
-        * trait_stats.rng
+        (gathered_unit_data["unit_rng"] + memoria_rng)
+        * (unit_rng_degree + familiar_rng + trait_stats.rng)
     )
 
     unit_dps = unit_damage / unit_spa
@@ -91,7 +97,7 @@ def calculate_unit_stats(gathered_unit_data: pd.Series) -> FinalUnitData:
         attack_degree=unit_atk_degree,
         spa_degree=unit_spa_degree,
         range_degree=unit_rng_degree,
-        memoria=None,
+        memoria=memoria_name,
         familiar=None,
         expected_dps=unit_dps,
     )
