@@ -32,7 +32,7 @@ For Memoria stats: Base Stats x Level x Stat Degree x Trait Multiplier
 
 For Unit damage: (Base Damage x Familiar Stats + Memoria Stats) x Unit Level x Unit Trait x Unit Stat Degree
 
-For Crits: (Unit Damage * Crit Damage Modifier * Crit Chance) + (Unit Damage * (1 - Crit Chance))
+For Crits: (Unit Damage * Crit Damage Modifier * Crit Chance) + (Unit Damage * (min(1 - Crit Chance))). The second part of this formula is done to get an average additional crit damage. If the unit has overcrit, it will apply the same formula without min().
 
 For DoTs: They are calculated the same as above damage, based on the percentage and time (ex. 50% bleed over 8 seconds.)
 
