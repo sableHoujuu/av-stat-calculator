@@ -4,9 +4,10 @@ import numpy as np
 import pandas as pd
 
 # Initializing the data once at runtime, we don't want to do this every time it's called.
-# Later on this will be made into a function
+# Later on this will be made into a function to be called at the beginning of main.py.
 unit_data = pd.read_csv("data/units.csv", index_col="unit_id")
 memoria_data = pd.read_csv("data/memoria.csv", index_col="memoria_id")
+familiar_data = pd.read_csv("data/familiars.csv", index_col="familiar_id")
 
 
 def validate_data():
@@ -33,3 +34,11 @@ def get_memoria_data(name: str) -> pd.Series | pd.DataFrame:
         print("Can't find specified memoria.")
         raise ValueError
     return memoria_rows
+
+def get_familiar_data(name: str) -> pd.Series | pd.DataFrame:
+    name = name.lower()
+    familiar_rows = familiar_data[familiar_data["familiar_name"].str.lower() == name]
+    if familiar_rows.empty:
+        print("Can't find specified familiar.")
+        raise ValueError
+    return familiar_rows

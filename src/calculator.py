@@ -50,9 +50,13 @@ def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, famil
         memoria_name = memoria_data["memoria_name"]
 
     if familiar_data is None:
-        familiar_dmg, familiar_spa, familiar_rng, familiar_crit_chance, familiar_crit_dmg = 0, 1, 0, 0, 0
+        familiar_dmg, familiar_spa, familiar_rng, familiar_crit_chance, familiar_crit_dmg = 1, 1, 1, 0, 0
     else:
-        raise NotImplementedError
+        familiar_dmg = familiar_data["familiar_dmg_modifier"]
+        familiar_spa = familiar_data["familiar_spa_modifier"]
+        familiar_rng = familiar_data["familiar_rng_modifier"]
+        familiar_crit_chance = familiar_data["familiar_crit_chance_modifier"]
+        familiar_crit_dmg = familiar_data["familiar_crit_chance_modifier"]
 
     trait_stats: TraitStats = get_unit_trait_stats(
         UnitTrait(gathered_unit_data["unit_trait"])

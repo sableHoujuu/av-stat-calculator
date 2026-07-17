@@ -1,0 +1,2 @@
+familiar_id,familiar_name,familiar_rarity,familiar_dmg_modifier_min,familiar_dmg_modifier_max,familiar_spa_modifier_min,familiar_spa_modifier_max,familiar_rng_modifier_min,familiar_rng_modifier_max,familiar_crit_chance_modifier_min,familiar_crit_chance_modifier_max,familiar_crit_dmg_modifier_min,familiar_crit_dmg_modifier_max
+1,The Doctor,Secret,1,1.2,1,1,1,1.2,0,0,0,0
