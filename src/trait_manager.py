@@ -22,7 +22,7 @@ class UnitTrait(Enum):
 TraitStats = namedtuple(
     "TraitStats",
     ["dmg", "spa", "rng", "crit_chance", "crit_dmg"],
-    defaults=[1.0, 1.0, 1.0, 0.0, 0.0],
+    defaults=[0.0, 0.0, 0.0, 0.0, 0.0],
 )
 
 
@@ -30,22 +30,22 @@ def get_unit_trait_stats(trait: UnitTrait) -> TraitStats:
     match trait:
         case UnitTrait.MONARCH:
             return TraitStats(
-                dmg=4, spa=0.9, rng=1.05
-            )  # remember, dmg is +300%, which is equivalent to * 4
+                dmg=3, spa=0.1, rng=.05
+            )
         case UnitTrait.ETHEREAL:
-            return TraitStats(dmg=1.2, spa=0.8, rng=1.05)
+            return TraitStats(dmg=.2, spa=0.2, rng=.05)
         case UnitTrait.SOLAR:
-            return TraitStats(dmg=1.1, spa=0.95, rng=1.25)
+            return TraitStats(dmg=.1, spa=0.05, rng=.25)
         case UnitTrait.DEADEYE:
             return TraitStats(
                 crit_chance=0.45, crit_dmg=0.5
             )  # crit is additive with itself, which is why we don't put 1.45
         case UnitTrait.BLITZ:
-            return TraitStats(spa=0.8)
+            return TraitStats(spa=0.2)
         case UnitTrait.FORTUNE:
             return TraitStats()
         case UnitTrait.MARKSMAN:
-            return TraitStats(rng=1.3)
+            return TraitStats(rng=.3)
         case UnitTrait.SCHOLAR:
             return TraitStats()
         case UnitTrait.VIGOR:

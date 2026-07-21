@@ -36,12 +36,12 @@ SPA: {self.spa}
 Range: {self.range}
 Level: {self.level}
 Trait: {self.trait} (fix this to print the trait name)
-Attack Stat: {(self.attack_degree - 1) * 100}%
-SPA Stat: {(self.spa_degree - 1) * 100}%
-Range Stat: {(self.range_degree - 1) * 100}%
+Attack Stat: {self.attack_degree * 100}%
+SPA Stat: {self.spa_degree * 100}%
+Range Stat: {self.range_degree * 100}%
 Memoria: {self.memoria}
 Familiar: {self.familiar}
-Raw Unit DPS (excluding crits or dot): {self.unit_dps}
+Raw Unit DPS (excluding crits or dot, including buffs and amps): {self.unit_dps}
 Final Estimated DPS (including everything): {self.total_dps_including_passives}
 """
 
@@ -50,10 +50,9 @@ def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, famil
     """Given a properly formatted input Series from pandas, and memoria or familiars, reads all relevant information and preforms all of the necessary calculations for final base stats and DPS. Handles passives."""
 
     # converting these to percentile for later, they can't change at this point
-    unit_spa_degree = 1 - (gathered_unit_data["unit_spa_degree"] / 100)
-    # ^ this one makes things go down so, needs to be inverse
-    unit_atk_degree = (gathered_unit_data["unit_atk_degree"] / 100) + 1
-    unit_rng_degree = (gathered_unit_data["unit_rng_degree"] / 100) + 1
+    unit_spa_degree = (gathered_unit_data["unit_spa_degree"] / 100)
+    unit_atk_degree = (gathered_unit_data["unit_atk_degree"] / 100)
+    unit_rng_degree = (gathered_unit_data["unit_rng_degree"] / 100)
 
     if memoria_data is None:
         memoria_dmg, memoria_rng = 0, 0
@@ -63,7 +62,7 @@ def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, famil
         memoria_name = memoria_data["memoria_name"]
 
     if familiar_data is None:
-        familiar_dmg, familiar_spa, familiar_rng, familiar_crit_chance, familiar_crit_dmg = 1, 1, 1, 0, 0
+        familiar_dmg, familiar_spa, familiar_rng, familiar_crit_chance, familiar_crit_dmg = 0, 0, 0, 0, 0
         familiar_name = None
     else:
         familiar_dmg = familiar_data["familiar_dmg_modifier"]
@@ -123,28 +122,27 @@ def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, famil
                 )
             )
             * (1 + (2.9442064 * ((gathered_unit_data["unit_level"] - 1) / 59)))
-            * trait_stats.dmg
-            * unit_atk_degree
-    ) * (1 + dmg_buff + universal_amp)
-    unit_spa = (
+            * (1 + trait_stats.dmg + unit_atk_degree) * (1 + dmg_buff + universal_amp)
+    )
+    unit_spa = ( # spa is treated inverse, remember, it goes down instead of up. this is why we divide
         gathered_unit_data["unit_spa"]
-        * (1 - (1 - unit_spa_degree) - (1 - familiar_spa) - (1 - trait_stats.spa))
-    ) * (1 + spa_buff)
+        / (1 + unit_spa_degree + familiar_spa + trait_stats.spa + spa_buff)
+    )
     unit_rng = (
         (gathered_unit_data["unit_rng"] + memoria_rng)
-        * (unit_rng_degree + familiar_rng + trait_stats.rng)
+        * (1+ unit_rng_degree + familiar_rng + trait_stats.rng)
     ) * (1 + range_buff)
 
     raw_dps = unit_damage / unit_spa
-    crit_dmg = unit_damage * (1 + (crit_dmg_buff + 1.25 + familiar_crit_dmg) * (crit_rate_buff + familiar_crit_chance))
-    final_dps = (crit_dmg / unit_spa) * dot_dps_percent
+    crit_dmg = unit_damage * (1 + (crit_dmg_buff + .25 + familiar_crit_dmg) * (crit_rate_buff + familiar_crit_chance))
+    final_dps = (crit_dmg / unit_spa) * (1 + dot_dps_percent)
 
 
     final_unit_data = FinalUnitData(
         unit_id=gathered_unit_data["unit_id"],
         name=gathered_unit_data["unit_name"],
         damage=unit_damage,
-        damage_per_crit=unit_damage * (1 + (crit_dmg_buff + 1.25 + familiar_crit_dmg)),
+        damage_per_crit=unit_damage * (1 + (crit_dmg_buff + .25 + familiar_crit_dmg)),
         spa=unit_spa,
         range=unit_rng,
         level=gathered_unit_data["unit_level"],
