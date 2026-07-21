@@ -1,6 +1,11 @@
-unit_id,passive_type,min_value,max_value,value_affects,value_type,status_duration,application,description
-1,permanent_buff,0,1,damage,max,inf,true_multiplicative,Deal 100% more damage
-1,conditional_buff,0,1,damage,max,15,multiplicative,"While Void is active, buff this unit's damage by 100%"
-1,permanent_buff,0,0.5,crit_damage,max,inf,multiplicative,Critical hits from this unit deal 50% more damage 
-1,conditional_buff,0,1,damage,range,inf,multiplicative,Cursed Output: Buff crit rate and damage by the meter spent 
-1,conditional_buff,0,1,crit_rate,range,inf,additive,Cursed Output: Buff crit rate and damage by the meter spent 
+unit_id,passive_type,min_value,max_value,value_affects,value_type,status_duration,application,query_user,description
+1,permanent_buff,0,1,damage,max,inf,additive,FALSE,Deal 100% more damage
+1,conditional_buff,0,1,damage,max,15,additive,TRUE,"While Void is active, buff this unit's damage by 100%"
+1,permanent_buff,0,0.5,crit_damage,max,inf,additive,FALSE,Critical hits from this unit deal 50% more damage 
+1,conditional_buff,0,1,damage,range,inf,additive,TRUE,Cursed Output: Buff crit rate and damage by the meter spent 
+1,conditional_buff,0,1,crit_rate,range,inf,additive,TRUE,Cursed Output: Buff crit rate and damage by the meter spent 
+3,dot_bleed,1,1,None,max,10,on_attack,TRUE,bleed for 100% damage for 10 seconds
+3,dot_burn,1,1,None,max,10,on_attack,TRUE,burn for 100% damage for 10 seconds
+3,diseased,0.5,0.5,None,max,inf,additive,TRUE,applies diseased
+3,dismantle,1,1,None,max,10,additive,TRUE,applies dismantle
+3,universal_amp,0.3,0.3,damage,max,inf,additive,TRUE,applies despair/bubbled (damage amps)

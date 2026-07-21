@@ -71,7 +71,7 @@ def main():
     while True:
         try:
             unit_atk_degree = float(input("Enter attack stat degree: "))
-            if unit_atk_degree > 25.0 or unit_atk_degree <= 0.0:
+            if unit_atk_degree > 25.0 or unit_atk_degree < 0.0:
                 print("Attack stat must be between 0 and 25.")
                 continue
             break
@@ -84,7 +84,7 @@ def main():
     while True:
         try:
             unit_spa_degree = float(input("Enter SPA stat degree: "))
-            if unit_spa_degree > 12.5 or unit_spa_degree <= 0.0:
+            if unit_spa_degree > 12.5 or unit_spa_degree < 0.0:
                 print("SPA stat must be between 0 and 12.5.")
                 continue
             break
@@ -97,7 +97,7 @@ def main():
     while True:
         try:
             unit_rng_degree = float(input("Enter range stat degree: "))
-            if unit_rng_degree > 12.5 or unit_rng_degree <= 0.0:
+            if unit_rng_degree > 12.5 or unit_rng_degree < 0.0:
                 print("Range stat must be between 0 and 12.5.")
                 continue
             break
@@ -113,7 +113,6 @@ def main():
     # all required unit information gathered, time to start doing stuff, like packaging the data we have
 
     gathered_unit_data = pd.concat([matching_unit, pd.Series(usr_input_values)])
-    # this will become final_unit_data later, once we do the calculations and process it to be usable
 
     calc_only_unit: bool = not confirm(
         "Would you like to perform the calculations using a memoria, familiar, or external buffs?"
@@ -154,9 +153,8 @@ def main():
 
     matching_familiar = matching_familiars.reset_index().iloc[0]
     processed_familiar = process_familiar(matching_familiar)
-    print(processed_familiar)
 
-    #print(calculate_unit_stats(gathered_unit_data, memoria_data=matching_memoria, familiar_data=processed_familiar))
+    print(calculate_unit_stats(gathered_unit_data, memoria_data=matching_memoria, familiar_data=processed_familiar))
 
 
 if __name__ == "__main__":

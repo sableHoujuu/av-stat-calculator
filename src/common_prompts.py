@@ -8,9 +8,11 @@ def confirm(prompt) -> bool:
             return answer in ("y", "yes")
         print("Please enter y or n.")
 
-def range(prompt, min: float, max: float) -> float:
+def range_prompt(prompt, min: float, max: float) -> float:
+    float(min)
+    float(max) # python doesn't enforce types, so we cast to be sure
     while True:
         answer = float(input(f"{prompt}:").strip().lower())
         if answer >= min and answer <= max:
             return answer
-        print(f"Please enter a value between {min} and {max}.")
+        print(f"Please enter a value between {min} and {max}.") # TODO: make this print and accept more user-readable values
