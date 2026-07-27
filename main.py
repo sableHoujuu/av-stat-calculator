@@ -5,7 +5,12 @@ import pandas as pd
 
 from src.calculator import calculate_unit_stats
 from src.common_prompts import confirm
-from src.data_loader import get_familiar_data, get_memoria_data, get_unit_data, validate_data
+from src.data_loader import (
+    get_familiar_data,
+    get_memoria_data,
+    get_unit_data,
+    validate_data,
+)
 from src.data_processor import process_familiar
 from src.trait_manager import UnitTrait
 
@@ -58,7 +63,7 @@ def main():
     while True:
         usr_input = str(input("Enter unit trait: "))
         try:
-            unit_trait = UnitTrait(usr_input.lower())
+            unit_trait = UnitTrait(usr_input.capitalize())
             break
         except ValueError:
             print("Please input a valid trait.")

@@ -5,8 +5,8 @@ from typing import cast
 import numpy as np
 import pandas as pd
 
+from src.data_loader import UnitPassiveRow, get_unit_passive_data
 from src.trait_manager import TraitStats, UnitTrait, get_unit_trait_stats
-from src.data_loader import get_unit_passive_data, UnitPassiveRow
 
 
 @dataclass
@@ -35,7 +35,7 @@ Damage Per Crit: {self.damage_per_crit}
 SPA: {self.spa}
 Range: {self.range}
 Level: {self.level}
-Trait: {self.trait} (fix this to print the trait name)
+Trait: {self.trait}
 Attack Stat: {self.attack_degree * 100}%
 SPA Stat: {self.spa_degree * 100}%
 Range Stat: {self.range_degree * 100}%

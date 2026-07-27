@@ -5,18 +5,21 @@ from enum import Enum
 
 
 class UnitTrait(Enum):
-    NONE = "none"
-    VIGOR = "vigor"
-    SWIFT = "swift"
-    RANGE = "range"
-    MARKSMAN = "marksman"
-    SCHOLAR = "scholar"
-    BLITZ = "blitz"
-    FORTUNE = "fortune"
-    DEADEYE = "deadeye"
-    SOLAR = "solar"
-    ETHEREAL = "ethereal"
-    MONARCH = "monarch"
+    NONE = "None"
+    VIGOR = "Vigor"
+    SWIFT = "Swift"
+    RANGE = "Range"
+    MARKSMAN = "Marksman"
+    SCHOLAR = "Scholar"
+    BLITZ = "Blitz"
+    FORTUNE = "Fortune"
+    DEADEYE = "Deadeye"
+    SOLAR = "Solar"
+    ETHEREAL = "Ethereal"
+    MONARCH = "Monarch"
+
+    def __str__(self):
+        return self.value
 
 
 TraitStats = namedtuple(

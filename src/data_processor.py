@@ -1,8 +1,9 @@
 # Handles any necessary data processing that doesn't make sense to be handled inline
 import pandas as pd
 
-from src.data_loader import get_unit_passive_data
 from src.common_prompts import range_prompt
+from src.data_loader import get_unit_passive_data
+
 
 def process_familiar(familiar_data: pd.Series) -> pd.Series:
     """Handles user input for familiars, and collecting any relevant information."""

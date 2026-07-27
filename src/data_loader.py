@@ -1,11 +1,11 @@
 import sys
-from typing import cast, NamedTuple
 from collections import namedtuple
+from typing import NamedTuple, cast
 
 import numpy as np
 import pandas as pd
 
-from src.common_prompts import range_prompt, confirm
+from src.common_prompts import confirm, range_prompt
 
 # Initializing the data once at runtime, we don't want to do this every time it's called.
 # Later on this will be made into a function to be called at the beginning of main.py.
