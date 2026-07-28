@@ -8,6 +8,8 @@ import pandas as pd
 from src.data_loader import UnitPassiveRow, get_unit_passive_data
 from src.trait_manager import TraitStats, UnitTrait, get_unit_trait_stats
 
+#TODO put this constant in a better place later
+BASE_CRIT_RATE = 0.25
 
 @dataclass
 class FinalUnitData:
@@ -25,7 +27,8 @@ class FinalUnitData:
     memoria: str | None
     familiar: str | None
     unit_dps: float
-    total_dps_including_passives: float
+    total_dps_excluding_crits: float
+    total_dps_including_all: float
 
     def __str__(self):
         return f"""Note that all values assume max upgrade.
@@ -42,7 +45,8 @@ Range Stat: {self.range_degree * 100}%
 Memoria: {self.memoria}
 Familiar: {self.familiar}
 Raw Unit DPS (excluding crits or dot, including buffs and amps): {self.unit_dps:,.2f}
-Final Estimated DPS (including everything): {self.total_dps_including_passives:,.2f}
+Final Estimated DPS (excluding crits): {self.total_dps_excluding_crits:,.2f}
+Final Estimated DPS (including crits): {self.total_dps_including_all:,.2f}
 """
 
 
@@ -86,6 +90,7 @@ def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, famil
         universal_amp = 0
         dmg_buff = range_buff = spa_buff = 0
         crit_rate_buff = crit_dmg_buff = 0
+        bleed_crit_rate = burn_crit_rate = 0
         for passive in unit_passives:
             passive = cast(UnitPassiveRow, passive)
             match passive.passive_type:
@@ -111,8 +116,14 @@ def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, famil
                             crit_rate_buff += passive.value
                         case "crit_dmg":
                             crit_dmg_buff += passive.value
+                        case "bleed_crit_rate":
+                            bleed_crit_rate += passive.value
+        bleed_dps_percent_with_crit = bleed_dmg * (1 + bleed_amp + dot_amp + (crit_dmg_buff + BASE_CRIT_RATE + familiar_crit_dmg) * (crit_rate_buff + familiar_crit_chance + bleed_crit_rate))
         bleed_dps_percent = bleed_dmg * (1 + bleed_amp + dot_amp)
+        burn_dps_percent_with_crit = burn_dmg * (1 + bleed_amp + dot_amp + (crit_dmg_buff + BASE_CRIT_RATE + familiar_crit_dmg) * (crit_rate_buff + familiar_crit_chance + burn_crit_rate))
         burn_dps_percent = burn_dmg * (1 + burn_amp + dot_amp)
+        # Clean up this section later and fix the non-ampable damage to work with crit TODO
+        dot_dps_percent_with_crit = (bleed_dps_percent_with_crit + burn_dps_percent_with_crit + non_ampable_dot_dmg + non_stackable_dot_dmg) * (1 + universal_amp)
         dot_dps_percent = (burn_dps_percent + bleed_dps_percent + non_ampable_dot_dmg + non_stackable_dot_dmg) * (1 + universal_amp)
 
     unit_damage = float(
@@ -134,15 +145,16 @@ def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, famil
     ) * (1 + range_buff)
 
     raw_dps = unit_damage / unit_spa
-    crit_dmg = unit_damage * (1 + (crit_dmg_buff + .25 + familiar_crit_dmg) * (crit_rate_buff + familiar_crit_chance))
-    final_dps = (crit_dmg / unit_spa) * (1 + dot_dps_percent)
+    crit_dmg = unit_damage * (1 + (crit_dmg_buff + BASE_CRIT_RATE + familiar_crit_dmg) * (crit_rate_buff + familiar_crit_chance))
+    final_dps = (unit_damage / unit_spa) * (1 + dot_dps_percent)
+    final_dps_with_dot_crit = (crit_dmg / unit_spa) * (1 + dot_dps_percent_with_crit)
 
 
     final_unit_data = FinalUnitData(
         unit_id=gathered_unit_data["unit_id"],
         name=gathered_unit_data["unit_name"],
         damage=unit_damage,
-        damage_per_crit=unit_damage * (1 + (crit_dmg_buff + .25 + familiar_crit_dmg)),
+        damage_per_crit=unit_damage * (1 + (crit_dmg_buff + BASE_CRIT_RATE + familiar_crit_dmg)),
         spa=unit_spa,
         range=unit_rng,
         level=gathered_unit_data["unit_level"],
@@ -153,7 +165,8 @@ def calculate_unit_stats(gathered_unit_data: pd.Series, memoria_data=None, famil
         memoria=memoria_name,
         familiar=familiar_name,
         unit_dps=raw_dps,
-        total_dps_including_passives=final_dps,
+        total_dps_excluding_crits=final_dps,
+        total_dps_including_all=final_dps_with_dot_crit,
     )
 
     return final_unit_data

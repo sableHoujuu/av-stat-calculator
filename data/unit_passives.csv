@@ -4,8 +4,13 @@ unit_id,passive_type,min_value,max_value,value_affects,value_type,status_duratio
 1,permanent_buff,0,0.5,crit_damage,max,inf,additive,FALSE,Critical hits from this unit deal 50% more damage 
 1,conditional_buff,0,1,damage,range,inf,additive,TRUE,Cursed Output: Buff crit rate and damage by the meter spent 
 1,conditional_buff,0,1,crit_rate,range,inf,additive,TRUE,Cursed Output: Buff crit rate and damage by the meter spent 
+2,dot_bleed,0.8,0.8,None,max,8,on_attack,FALSE,Attacks inflict bleed for 80% damage over 8 seconds
+2,dismantle,1,1,None,max,inf,on_attack,TRUE,Attacks on cleaved enemies inflict dismantle (this assumes you have someone else to set up cleave for full dps)
+2,conditional_buff,0.02,0.8,damage,range,inf,additive,TRUE,"When a bleeding enemy dies,  buff damage by 2% (up to 80%). For accurate numbers, use increments of 2 (4, 6, 8, etc)"
+2,conditional_buff,1,1,bleed_crit_rate,max,inf,None,TRUE,"When this unit applies Bleed to an enemy with Dismantle, that Bleed is guaranteed to crit"
+2,dot_burn,2,2,None,max,8,on_attack,TRUE,Attacks inflict Burn for 200% of this unit's damage over 8 seconds
 3,dot_bleed,1,1,None,max,10,on_attack,TRUE,bleed for 100% damage for 10 seconds
 3,dot_burn,1,1,None,max,10,on_attack,TRUE,burn for 100% damage for 10 seconds
 3,diseased,0.5,0.5,None,max,inf,additive,TRUE,applies diseased
-3,dismantle,1,1,None,max,10,additive,TRUE,applies dismantle
+3,dismantle,1,1,None,max,inf,additive,TRUE,applies dismantle
 3,universal_amp,0.3,0.3,damage,max,inf,additive,TRUE,applies despair/bubbled (damage amps)
