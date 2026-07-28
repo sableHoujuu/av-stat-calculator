@@ -30,10 +30,10 @@ class FinalUnitData:
     def __str__(self):
         return f"""Note that all values assume max upgrade.
 Unit Name: {self.name}
-Damage: {self.damage}
-Damage Per Crit: {self.damage_per_crit}
-SPA: {self.spa}
-Range: {self.range}
+Damage: {self.damage:,.2f}
+Damage Per Crit: {self.damage_per_crit:,.2f}
+SPA: {self.spa:,.2f}
+Range: {self.range:,.2f}
 Level: {self.level}
 Trait: {self.trait}
 Attack Stat: {self.attack_degree * 100}%
@@ -41,8 +41,8 @@ SPA Stat: {self.spa_degree * 100}%
 Range Stat: {self.range_degree * 100}%
 Memoria: {self.memoria}
 Familiar: {self.familiar}
-Raw Unit DPS (excluding crits or dot, including buffs and amps): {self.unit_dps}
-Final Estimated DPS (including everything): {self.total_dps_including_passives}
+Raw Unit DPS (excluding crits or dot, including buffs and amps): {self.unit_dps:,.2f}
+Final Estimated DPS (including everything): {self.total_dps_including_passives:,.2f}
 """
 
 

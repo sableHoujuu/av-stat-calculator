@@ -27,9 +27,6 @@ def main():
             break
         except ValueError:
             print("Unit could not be found, please try again.")
-        except Exception as e:
-            print(f"Unhandled exception: {e}")
-            sys.exit(1)
 
     ### BIG IMPORTANT NOTE
     # make this and the memoria and familiar getters into a function at some point
@@ -54,9 +51,6 @@ def main():
             print("Please enter a whole number.")
         except TypeError:
             print("Please input a number.")
-        except Exception as e:
-            print(f"Unhandled exception: {e}")
-            sys.exit(1)
     usr_input_values["unit_level"] = unit_level
 
     # getting trait
@@ -67,9 +61,7 @@ def main():
             break
         except ValueError:
             print("Please input a valid trait.")
-        except Exception as e:
-            print(f"Unhandled exception: {e}")
-            sys.exit(1)
+
     usr_input_values["unit_trait"] = unit_trait
 
     # getting stat degrees
@@ -82,9 +74,8 @@ def main():
             break
         except TypeError:
             print("Please input a number.")
-        except Exception as e:
-            print(f"Unhandled exception: {e}")
-            sys.exit(1)
+        except ValueError:
+            print("Please input a properly formatted number.")
 
     while True:
         try:
@@ -95,9 +86,8 @@ def main():
             break
         except TypeError:
             print("Please input a number.")
-        except Exception as e:
-            print(f"Unhandled exception: {e}")
-            sys.exit(1)
+        except ValueError:
+            print("Please input a properly formatted number.")
 
     while True:
         try:
@@ -108,9 +98,9 @@ def main():
             break
         except TypeError:
             print("Please input a number.")
-        except Exception as e:
-            print(f"Unhandled exception: {e}")
-            sys.exit(1)
+        except ValueError:
+            print("Please input a properly formatted number.")
+
 
     usr_input_values["unit_atk_degree"] = unit_atk_degree
     usr_input_values["unit_spa_degree"] = unit_spa_degree
@@ -136,9 +126,7 @@ def main():
            break
        except ValueError:
            print("Memoria could not be found, please try again.")
-       except Exception as e:
-           print(f"Unhandled exception: {e}")
-           sys.exit(1)
+
 
     matching_memoria = matching_memorias.reset_index().iloc[0]
 
@@ -152,9 +140,7 @@ def main():
             break
         except ValueError:
             print("Familiar could not be found, please try again.")
-        except Exception as e:
-            print(f"Unhandled exception: {e}")
-            sys.exit(1)
+
 
     matching_familiar = matching_familiars.reset_index().iloc[0]
     processed_familiar = process_familiar(matching_familiar)
